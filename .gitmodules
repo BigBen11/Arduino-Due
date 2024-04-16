@@ -1,0 +1,4 @@
+[submodule "CMSIS"]
+	path = cmsis
+	url = https://code.fbi.h-da.de/eingebettete-systeme/arduino-due/cmsis.git
+	branch = main
