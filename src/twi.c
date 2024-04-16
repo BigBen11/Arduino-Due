@@ -42,6 +42,6 @@ void twi_init(Twi *const twi, const uint32_t freq, const bool slave)
     twi->TWI_PTCR = TWI_PTCR_RXTEN | TWI_PTCR_TXTEN;
 }
 
-void twi_write(Twi *const twi, const uint32_t address, const void *const ptr, const uint32_t size)
+void twi_write(Twi *const twi, const uint32_t address, const uint8_t *const ptr, const uint32_t size)
 {
 }

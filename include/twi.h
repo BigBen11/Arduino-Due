@@ -16,6 +16,6 @@
 #define twi_wait(twi, flag) while (!twi_check(twi, flag))
 
 void twi_init(Twi *const twi, const uint32_t freq, const bool slave);
-void twi_write(Twi *const twi, const uint32_t address, const void *const ptr, const uint32_t size);
+void twi_write(Twi *const twi, const uint32_t address, const uint8_t *const ptr, const uint32_t size);
 
 #endif // _TWI_H_

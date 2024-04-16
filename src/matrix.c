@@ -17,8 +17,7 @@
 
 void matrix_setup(Twi *const twi, const uint8_t device_address)
 {
-
-    static const uint8_t input_sequence[] = {
+    const uint8_t input_sequence[] = {
         0x21, // internal system clock enable
         0xA0, // row output pin set
         0xE0, // dimming set
@@ -27,7 +26,7 @@ void matrix_setup(Twi *const twi, const uint8_t device_address)
     for (uint32_t i = 0; i < sizeof(input_sequence); i++)
         twi_write(twi, device_address, input_sequence + i, 1);
 
-    static uint8_t display_data[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    const uint8_t display_data[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     twi_write(twi, MATRIX_ADDRESS, display_data, sizeof(display_data));
 }
 
