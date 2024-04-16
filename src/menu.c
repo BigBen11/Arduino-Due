@@ -125,6 +125,10 @@ static void menu_print_frame(void)
 // current component state
 static void menu_print_state(void)
 {
+    static uint32_t tick_update = 0;
+    const uint32_t  interval    = CLOCK_TICKS_PER_SECOND / MENU_UPDATE_FREQUENCY;
+    if ( tick_update + interval > clock_get_loop_tick() ) return;
+
     // print sonic state
     menu_cursor(ROW_STATE, COLUMN_CLOCK);
     sprintf(buffer, "%s", clock_state_text[state.clock]);

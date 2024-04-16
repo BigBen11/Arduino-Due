@@ -5,12 +5,22 @@
 // FILE: matrix.c
 // CONTENTS: main loop 
 
+#include <serial.h>
+#include <menu.h>
+#include <clock.h>
+
 void init(void)
 {
+    serial_init();
+    menu_init();
+    clock_init();
 }
 
 void loop(void)
 {
+    serial_loop();
+    menu_loop();
+    clock_loop();
 }
 
 int main(void)
