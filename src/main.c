@@ -8,13 +8,32 @@
 #include <serial.h>
 #include <menu.h>
 #include <clock.h>
+#include <led.h>
+#include <twi.h>
+#include <matrix.h>
+
 
 void init(void)
 {
+    serial_init();
+    menu_init();
+    clock_init();
+    led_init();
+
+    //TWI-INIT
+    Twi *const twi = TWI1;
+    const uint32_t i2c_frequency = 1000; // 100 kHz
+    twi_init(twi, i2c_frequency, false);
+
+    matrix_init();
 }
 
 void loop(void)
 {
+    menu_loop();
+    clock_loop();
+    led_loop();
+    matrix_loop();
 }
 
 int main(void)

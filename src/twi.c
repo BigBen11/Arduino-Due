@@ -44,4 +44,46 @@ void twi_init(Twi *const twi, const uint32_t freq, const bool slave)
 
 void twi_write(Twi *const twi, const uint32_t address, const uint8_t *const ptr, const uint32_t size)
 {
+    /*Implementieren Sie die eigentliche Übertragung über I2C inheralb der twi_write Funktion. Verwenden 
+     *Sie für die Übertragung das MMR, SR und THR. Alternativ können Sie für die Übertragung auch den 
+     *DMA-Controller mit den Registern TPR und TCR verwenden. Die Adresse der LED-Matrix ist 0x70 bis 0x77.
+    */
+
+   twi->TWI_MMR = 0u << 12 | address << 16;
+
+   
+
+   
+    // Warten, bis das TWI bereit für eine neue Übertragung ist
+    //while (!(twi->TWI_SR & TWI_SR_TXRDY));
+
+    // Senden der Start-Bedingung
+    //twi->TWI_CR = TWI_CR_START;
+
+    // Warten, bis die Start-Bedingung übertragen wurde
+    //while (!(twi->TWI_SR & TWI_SR_TXRDY));
+
+    // Senden der Adresse mit dem WRITE-Bit (0)
+    //twi->TWI_THR = (address << 1) & ~1;
+
+    // Warten, bis die Adresse übertragen wurde
+    //while (!(twi->TWI_SR & TWI_SR_TXRDY));
+
+    // Senden der Daten
+    for (uint32_t i = 0; i < size; ++i)
+    {
+        // Senden des nächsten Datenbytes
+        twi->TWI_THR = ptr[i];
+
+        // Warten, bis das Byte übertragen wurde
+        while (!(twi->TWI_SR & TWI_SR_TXRDY));
+    }
+
+    // Senden der Stop-Bedingung
+    twi->TWI_CR = TWI_CR_STOP;
+
+    // Warten, bis die Stop-Bedingung übertragen wurde
+    while (!(twi->TWI_SR & TWI_SR_TXCOMP));
+
+
 }

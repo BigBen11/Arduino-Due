@@ -15,7 +15,7 @@ typedef struct Twi
     __O uint32_t TWI_IDR;       /*! @brief [Interrupt Disable Register](https://code.fbi.h-da.de/eingebettete-systeme/arduino-due/cmsis/-/raw/main/docs/datasheet.pdf#page=746) */
     __I uint32_t TWI_IMR;       /*! @brief [Interrupt Mask Register](https://code.fbi.h-da.de/eingebettete-systeme/arduino-due/cmsis/-/raw/main/docs/datasheet.pdf#page=747) */
     __I uint32_t TWI_RHR;       /*! @brief [Receive Holding Register](https://code.fbi.h-da.de/eingebettete-systeme/arduino-due/cmsis/-/raw/main/docs/datasheet.pdf#page=748) */
-    __O uint32_t TWI_THR;       /*! @brief [Transmit Holding Register](https://code.fbi.h-da.de/eingebettete-systeme/arduino-due/cmsis/-/raw/main/docs/datasheet.pdf#page=7409 */
+    __O uint32_t TWI_THR;       /*! @brief [Transmit Holding Register](https://code.fbi.h-da.de/eingebettete-systeme/arduino-due/cmsis/-/raw/main/docs/datasheet.pdf#page=749 */
     __I uint32_t Reserved2[50]; /*! @brief reserved */
     __IO uint32_t TWI_RPR;      /*! @brief [Receive Pointer Register](https://code.fbi.h-da.de/eingebettete-systeme/arduino-due/cmsis/-/raw/main/docs/datasheet.pdf#page=509) */
     __IO uint32_t TWI_RCR;      /*! @brief [Receive Counter Register](https://code.fbi.h-da.de/eingebettete-systeme/arduino-due/cmsis/-/raw/main/docs/datasheet.pdf#page=510) */
