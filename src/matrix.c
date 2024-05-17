@@ -106,9 +106,34 @@ void matrix_init(void)
     matrix_setup(TWI1, MATRIX_ADDRESS);
 }
 
+
 // loop for regular tasks related to LED matrix
 void matrix_loop(void)
 {
-    const uint8_t buffer[8] = {0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81};
-    matrix_update(TWI1, buffer);
+    if (state.sonic == SONIC_ON)
+    {
+        struct sample_t latest_sample;
+
+        // Prüfen, ob die neueste Messung gültig ist
+        if (sample_series_get(distance_raw, 0).valid)
+        {
+            latest_sample = sample_series_get(distance_raw, 0);
+
+            // Berechnung des Fortschritts basierend auf der gemessenen Distanz
+            uint8_t buffer[8];
+            int max_distance = 2000;  // Maximale Distanz in mm
+            float progress = (float)latest_sample.value / max_distance;
+            if (progress > 1.0) progress = 1.0; // Begrenzen auf maximal 1.0
+
+            // Fortschritt auf der LED-Matrix anzeigen
+            matrix_progress(buffer, progress);
+            matrix_update(TWI1, buffer);
+
+            //const uint8_t buffer[8] = {0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81};
+        }
+    }
 }
+
+
+
+

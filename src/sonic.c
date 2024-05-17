@@ -115,7 +115,8 @@ void sonic_init(void)
 
 void sonic_loop()
 {
-    // polling for the end of a measurement when the echo arrived
+
+    // polling for the end of a measurement when the echo arrivedl
     if ( TC2->TC_CHANNEL[2].TC_SR & TC_SR_LDRBS )          // if echo status register says Register B is loaded
     {
         // duration of echo signal in EDA_
@@ -134,3 +135,4 @@ void sonic_loop()
         TC2->TC_CHANNEL[2].TC_CCR = TC_CCR_SWTRG;
     }
 }
+

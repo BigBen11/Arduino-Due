@@ -11,6 +11,7 @@
 #include <led.h>
 #include <twi.h>
 #include <matrix.h>
+#include <sonic.h>
 
 
 void init(void)
@@ -22,10 +23,12 @@ void init(void)
 
     //TWI-INIT
     Twi *const twi = TWI1;
-    const uint32_t i2c_frequency = 1000; // 100 kHz
+    const uint32_t i2c_frequency = 1000; // 1 kHz
     twi_init(twi, i2c_frequency, false);
 
     matrix_init();
+
+    sonic_init();
 }
 
 void loop(void)
@@ -34,6 +37,7 @@ void loop(void)
     clock_loop();
     led_loop();
     matrix_loop();
+    sonic_loop();
 }
 
 int main(void)
