@@ -121,8 +121,9 @@ void matrix_loop(void)
 
             // Berechnung des Fortschritts basierend auf der gemessenen Distanz
             uint8_t buffer[8];
-            int max_distance = 2000;  // Maximale Distanz in mm
-            float progress = (float)latest_sample.value / max_distance;
+            int max_distance = 2200;  // Maximale Distanz in mm
+            float value_mm = (float)latest_sample.value / 1000; //Distanz in mm umwandeln
+            float progress = value_mm / max_distance;
             if (progress > 1.0) progress = 1.0; // Begrenzen auf maximal 1.0
 
             // Fortschritt auf der LED-Matrix anzeigen
