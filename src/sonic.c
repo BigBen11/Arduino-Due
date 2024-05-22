@@ -115,6 +115,7 @@ void sonic_init(void)
 
 void sonic_loop()
 {
+    struct sample_t sample;
 
     // polling for the end of a measurement when the echo arrivedl
     if ( TC2->TC_CHANNEL[2].TC_SR & TC_SR_LDRBS )          // if echo status register says Register B is loaded
@@ -123,7 +124,7 @@ void sonic_loop()
         int32_t duration = TC2->TC_CHANNEL[2].TC_RB - TC2->TC_CHANNEL[2].TC_RA;
 
         // create a new sample with measured distance [in mm] as value
-        struct sample_t sample;
+        
         sample.value = duration * SONIC_SPEED / ( DUE_MCK / 1000000 );
         sample.usec = clock_get_loop_usec();
         sample.valid = true;
@@ -133,6 +134,12 @@ void sonic_loop()
         
         // Reset the counter to be ready for the next measurement
         TC2->TC_CHANNEL[2].TC_CCR = TC_CCR_SWTRG;
+    }
+
+    if(sample_queue_remove(&sample)){
+        if(!sample.valid) return;
+
+        sample_series_put(distance_raw, sample);
     }
 }
 

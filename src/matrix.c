@@ -129,7 +129,7 @@ void matrix_loop(void)
             matrix_progress(buffer, progress);
             matrix_update(TWI1, buffer);
 
-            //const uint8_t buffer[8] = {0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81};
+            //const uint8_t buffer[8] = {0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81}; Für Praktikum 2 NICHT LÖSCHEN -> FINGER WEG
         }
     }
 }

@@ -58,7 +58,7 @@ extern struct sample_series_t *distance_raw;
 struct sample_t sample_series_get(const struct sample_series_t *const series, int index);
 
 // put a new sample into the sample series so the oldest sample will be overwritten
-//void sample_series_put(struct sample_series_t *const series, const struct sample_t sample);
+void sample_series_put(struct sample_series_t *const series, const struct sample_t sample);
 
 ///////////////////////////////////////////////////////////////////////////////
 // sample init/loop
