@@ -49,25 +49,17 @@ void twi_write(Twi *const twi, const uint32_t address, const uint8_t *const ptr,
      *DMA-Controller mit den Registern TPR und TCR verwenden. Die Adresse der LED-Matrix ist 0x70 bis 0x77.
     */
 
+    // 'Master write direction' setzen
    twi->TWI_MMR = 0u << 12 | address << 16;
 
-   
-
-   
     // Warten, bis das TWI bereit für eine neue Übertragung ist
-    //while (!(twi->TWI_SR & TWI_SR_TXRDY));
+    while (!(twi->TWI_SR & TWI_SR_TXRDY));
 
     // Senden der Start-Bedingung
-    //twi->TWI_CR = TWI_CR_START;
+    twi->TWI_CR = TWI_CR_START;
 
     // Warten, bis die Start-Bedingung übertragen wurde
-    //while (!(twi->TWI_SR & TWI_SR_TXRDY));
-
-    // Senden der Adresse mit dem WRITE-Bit (0)
-    //twi->TWI_THR = (address << 1) & ~1;
-
-    // Warten, bis die Adresse übertragen wurde
-    //while (!(twi->TWI_SR & TWI_SR_TXRDY));
+    while (!(twi->TWI_SR & TWI_SR_TXRDY));
 
     // Senden der Daten
     for (uint32_t i = 0; i < size; ++i)

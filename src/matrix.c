@@ -109,7 +109,7 @@ void matrix_init(void)
 
 // loop for regular tasks related to LED matrix
 void matrix_loop(void)
-{
+{  
     if (state.sonic == SONIC_ON)
     {
         struct sample_t latest_sample;
@@ -129,10 +129,14 @@ void matrix_loop(void)
             // Fortschritt auf der LED-Matrix anzeigen
             matrix_progress(buffer, progress);
             matrix_update(TWI1, buffer);
-
-            //const uint8_t buffer[8] = {0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81}; Für Praktikum 2 NICHT LÖSCHEN -> FINGER WEG
         }
     }
+
+
+    
+    //const uint8_t buffer[8] = {0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81}; //Für Praktikum 2 NICHT LÖSCHEN -> FINGER WEG
+    //matrix_update(TWI1, buffer);
+    
 }
 
 
