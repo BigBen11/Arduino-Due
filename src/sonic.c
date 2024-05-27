@@ -35,13 +35,44 @@ __attribute__((interrupt("IRQ"))) void TC8_Handler()
         uint32_t ra = TC2->TC_CHANNEL[2].TC_RA;
         uint32_t rb = TC2->TC_CHANNEL[2].TC_RB;
         uint32_t diff = rb - ra;
-        distance = diff * (EDA_SONICSPEED) / (84000000 / 1000000); // micro meters
+        distance = diff * (SONIC_SPEED) / (84000000 / 1000000); // micro meters
         new_distance = true;
 
         TC2->TC_CHANNEL[2].TC_CCR = TC_CCR_SWTRG;
     }
 }
 */
+
+
+__attribute__((interrupt("IRQ"))) void TC8_Handler(){
+
+    struct sample_t sample;
+
+
+    if ( TC2->TC_CHANNEL[2].TC_SR & TC_SR_LDRBS )          // if echo status register says Register B is loaded
+        {
+            // duration of echo signal in EDA_
+            int32_t duration = TC2->TC_CHANNEL[2].TC_RB - TC2->TC_CHANNEL[2].TC_RA;
+
+            // create a new sample with measured distance [in mm] as value
+            
+            sample.value = duration * SONIC_SPEED / ( DUE_MCK / 1000000 );
+            sample.usec = clock_get_loop_usec();
+            sample.valid = true;
+
+            // insert new sample into the sample_queue - forget sample if queue is full
+            sample_queue_insert(sample);
+            
+            // Reset the counter to be ready for the next measurement
+            TC2->TC_CHANNEL[2].TC_CCR = TC_CCR_SWTRG;
+        }
+
+        if(sample_queue_remove(&sample)){
+            if(!sample.valid) return;
+
+            sample_series_put(distance_raw, sample);
+        }
+}
 
 // initialize the timer used as ultrasonic sensor trigger
 void init_trigger(void)
@@ -93,7 +124,7 @@ void init_echo()
     TC2->TC_CHANNEL[2].TC_CCR = TC_CCR_CLKDIS;             // Disable the clock
 
     // NVIC
-    // NVIC_EnableIRQ(TC8_IRQn);
+    NVIC_EnableIRQ(TC8_IRQn);
 
     TC2->TC_CHANNEL[2].TC_CMR =     TC_CMR_LDBSTOP |        // Counter clock is stopped when RB loading occurs
                                     TC_CMR_CPCTRG |         // RC Compare resets the counter and starts the counter clock
@@ -102,7 +133,7 @@ void init_echo()
 
     TC2->TC_CHANNEL[2].TC_RC = -1;                          // use maximum value for register RC
 
-    // TC2->TC_CHANNEL[2].TC_IER = TC_IER_LDRBS;               // enable interrupt on register RB loaded
+    TC2->TC_CHANNEL[2].TC_IER = TC_IER_LDRBS;               // enable interrupt on register RB loaded
 
     TC2->TC_CHANNEL[2].TC_CCR = TC_CCR_CLKEN | TC_CCR_SWTRG;// Reset the counter and start the clock
 }
@@ -111,13 +142,15 @@ void sonic_init(void)
 {
     init_trigger();
     init_echo();
+    
 }
 
 void sonic_loop()
 {
-    struct sample_t sample;
+    //struct sample_t sample;
 
     // polling for the end of a measurement when the echo arrivedl
+    /*
     if ( TC2->TC_CHANNEL[2].TC_SR & TC_SR_LDRBS )          // if echo status register says Register B is loaded
     {
         // duration of echo signal in EDA_
@@ -141,5 +174,15 @@ void sonic_loop()
 
         sample_series_put(distance_raw, sample);
     }
+
+
+    */
 }
+
+
+
+
+
+
+
 

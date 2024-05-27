@@ -12,6 +12,7 @@
 #include <twi.h>
 #include <matrix.h>
 #include <sonic.h>
+#include <drive.h>
 
 
 void init(void)
@@ -29,6 +30,8 @@ void init(void)
     matrix_init();
 
     sonic_init();
+
+    drive_init();
 }
 
 void loop(void)
@@ -38,6 +41,7 @@ void loop(void)
     led_loop();
     matrix_loop();
     sonic_loop();
+    drive_loop();
 }
 
 int main(void)
