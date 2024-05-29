@@ -54,20 +54,15 @@ void drive_init(void){
     //Pwm->PWML6 
     //TODO: PWML6 in High PWML7 in Low machen für Forward fahren!!!!!!!!!!!
 
-        // FORWARD
-    PIOC->PIO_SODR = PIO_PC23;
-    PIOC->PIO_CODR = PIO_PC24;
+    
 
 
     // Enable the PWM output on the ENA pin (PIOC25)
-    PIOC->PIO_SODR = PIO_PC25; // Disable PIO control for peripheral use
-
-        // BACKWARD
-    PIOC->PIO_SODR = PIO_PC24;
-    PIOC->PIO_CODR = PIO_PC23;
+    //PIOC->PIO_SODR = PIO_PC25; 
 
 
-    PIOC->PIO_CODR = PIO_PC25; // Disable PIO control for peripheral use
+
+    //PIOC->PIO_CODR = PIO_PC25; // Disable PIO control for peripheral use
 
     
 }
@@ -76,10 +71,8 @@ void drive_init(void){
 void drive_loop(void)
 {
     // Update the PWM duty cycle based on the global variable duty_cycle
-    
     uint32_t rc = TC2->TC_CHANNEL[0].TC_RC;
     uint32_t ra = (uint32_t)((float)rc * duty_cycle);
-
     TC2->TC_CHANNEL[0].TC_RA = ra;
 
     if (direction)

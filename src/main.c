@@ -13,6 +13,7 @@
 #include <matrix.h>
 #include <sonic.h>
 #include <drive.h>
+#include <motion.h>
 
 
 void init(void)
@@ -28,10 +29,9 @@ void init(void)
     twi_init(twi, i2c_frequency, false);
 
     matrix_init();
-
     sonic_init();
-
     drive_init();
+    motion_init();
 }
 
 void loop(void)
@@ -42,6 +42,7 @@ void loop(void)
     matrix_loop();
     sonic_loop();
     drive_loop();
+    motion_loop();
 }
 
 int main(void)
