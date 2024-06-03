@@ -19,4 +19,6 @@ void drive_init(void);
 // loop for regular tasks related to PWM motor drive
 void drive_loop(void);
 
+void drive_clock_init(void);
+
 #endif // DRIVE_H

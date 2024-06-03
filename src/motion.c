@@ -28,7 +28,7 @@ void motion_loop(void)
         PIOC->PIO_SODR = PIO_PC25;     // Enable the PWM output on the ENA pin (PIOC25)
         break;
    case MOTION_OFF:
-        PIOC->PIO_CODR = PIO_PC25; // Disable PIO control for peripheral use
+        PIOC->PIO_CODR = PIO_PC25;     // Disable PIO control for peripheral use        
         break;
    case MOTION_NOLOOP:
        break;
@@ -41,6 +41,6 @@ void motion_loop(void)
     if (current_sample.value / 1000. > gap_target) {
         duty_cycle = 0.5f;
     } else {
-        duty_cycle = 0.f;
+        duty_cycle = 0.0f;
     }
 }
