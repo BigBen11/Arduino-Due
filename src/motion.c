@@ -9,6 +9,7 @@
 #include <sample.h>
 #include <state.h>
 #include <sam3x8e.h>
+#include <drive.h>
 
 
 // current movement is zero mm/sec
@@ -24,11 +25,11 @@ void motion_loop(void)
 {
   switch (state.motion)
    {
-   case MOTION_ON:
-        PIOC->PIO_SODR = PIO_PC25;     // Enable the PWM output on the ENA pin (PIOC25)
+   case MOTION_ON:     // Enable the PWM output on the ENA pin (PIOC25)
+        PIOC->PIO_PDR = PIO_PC25;
         break;
    case MOTION_OFF:
-        PIOC->PIO_CODR = PIO_PC25;     // Disable PIO control for peripheral use        
+        PIOC->PIO_PER = PIO_PC25;     // Disable PIO control for peripheral use        
         break;
    case MOTION_NOLOOP:
        break;
@@ -36,11 +37,13 @@ void motion_loop(void)
        break;
    }
 
-    // super simple control logic
+   //drive_duty(100, 0.25f);
+
+     //super simple control logic
     struct sample_t current_sample = sample_series_get(distance_raw, 0);
     if (current_sample.value / 1000. > gap_target) {
-        duty_cycle = 0.5f;
+         drive_duty(100, 0.25f);
     } else {
-        duty_cycle = 0.0f;
+         drive_duty(100, 0.01f);
     }
 }
