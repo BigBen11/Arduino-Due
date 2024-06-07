@@ -11,9 +11,16 @@
 #include <sam3x8e.h>
 #include <drive.h>
 
+#define FREQENCY_FOR_DUTY_CYCLE 100
+#define KP 0.00035
+#define TV 0.001
+#define DISTURBANCE 0.001
 
-// current movement is zero mm/sec
-int32_t motion_current = 0;
+// last speed in loop in mm/sec
+float speed = 0;
+
+// last acceleration (duty) in loop in mm/sec²
+float current_duty = 0;
 
 // initialization steps for motion specific
 void motion_init(void)
@@ -37,13 +44,42 @@ void motion_loop(void)
        break;
    }
 
-   //drive_duty(100, 0.25f);
-
-     //super simple control logic
     struct sample_t current_sample = sample_series_get(distance_raw, 0);
-    if (current_sample.value / 1000. > gap_target) {
-         drive_duty(100, 0.25f);
-    } else {
-         drive_duty(100, 0.01f);
-    }
+
+    //if (current_sample.value / 1000. > gap_target) {
+    //     drive_duty(100, 0.25f);
+    //} else {
+    //     drive_duty(100, 0.01f);
+    //}
+
+     // duty ~ acceleration
+     float duty = PD_regler(gap_target, current_sample.value / 1000.);
+     drive_duty(FREQENCY_FOR_DUTY_CYCLE, duty);
+
+     //Speed upgrade
+     if(speed < 0.5){
+          speed = speed + duty;
+     }else{
+          speed = 1;
+     }
+
+}
+
+float PD_regler(int32_t soll, int32_t ist){
+
+     float regelabweichung = soll - ist;
+
+     if(regelabweichung < 0){
+          regelabweichung = -regelabweichung;
+     }
+
+     float p_anteil = KP * regelabweichung;
+
+     float d_anteil = TV * speed;
+
+     float pd_insgesamt = p_anteil + d_anteil;
+
+     float pd_mit_stoerungen = pd_insgesamt - DISTURBANCE;
+
+     return pd_mit_stoerungen;
 }
