@@ -20,6 +20,6 @@ void motion_init(void);
 // loop for regular tasks related to motion functions
 void motion_loop(void);
 
-float PD_regler(int32_t soll, int32_t ist);
+float PD_controller(float target, float current);
 
 #endif // MOTION_H
