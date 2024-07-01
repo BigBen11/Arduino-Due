@@ -48,8 +48,6 @@ void drive_init(void){
     // Configure PIOC25 for PWM output
     PIOC->PIO_ABSR |= PIO_PC25; // Assigns the I/O line to the Peripheral B function 
 
-
-
 }
 
 // loop for regular tasks related to PWM motor drive
@@ -58,14 +56,14 @@ void drive_loop(void)
     if (direction)
     {
         // FORWARD
-        PIOC->PIO_SODR = PIO_PC23;
-        PIOC->PIO_CODR = PIO_PC24;
+        PIOC->PIO_CODR = PIO_PC23;
+        PIOC->PIO_SODR = PIO_PC24;
     }
     else
     {
         // BACKWARD
-        PIOC->PIO_CODR = PIO_PC23;
-        PIOC->PIO_SODR = PIO_PC24;
+        PIOC->PIO_SODR = PIO_PC23;
+        PIOC->PIO_CODR = PIO_PC24;
     }
     
 }

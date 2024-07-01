@@ -14,15 +14,19 @@
 #define DUTY_CYCLE_FREQUENCY 100
 
 // Proportional Term Coefficient
-#define PROPORTIONAL_GAIN 0.0005 
+#define PROPORTIONAL_GAIN 0.002 
 
 // Derivative Term Coefficient
-#define DERIVATIVE_GAIN 0.0
+#define DERIVATIVE_GAIN 0.0005
 
-#define DISTURBANCE_OFFSET 0.001
+#define DISTURBANCE_OFFSET 0.005
 
 // Last speed in loop (in mm/sec)
 static float current_speed = 0.0;
+
+#define STATIC_BACKWARDS_DUTYCYCLE 0.22
+
+int frequency = 100;
 
 // Initialization steps for motion specific
 void motion_init(void) {
@@ -59,7 +63,20 @@ void motion_loop(void) {
 
     // Calculate duty using the PD controller
     float duty_cycle = PD_controller(gap_target, current_sample.value / 1000.0); // convert mm to meters
-    drive_duty(DUTY_CYCLE_FREQUENCY, duty_cycle);
+
+    if(direction == false){
+        duty_cycle = STATIC_BACKWARDS_DUTYCYCLE;
+        frequency = 140;
+    }
+
+    drive_duty(frequency, duty_cycle);
+
+    if(gap_target > current_sample.value / 1000.0){
+        direction = false;
+    }else{
+        direction = true; 
+    }
+
 }
 
 // PD controller function
