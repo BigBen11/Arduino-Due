@@ -14,17 +14,17 @@
 #define DUTY_CYCLE_FREQUENCY 100
 
 // Proportional Term Coefficient
-#define PROPORTIONAL_GAIN 0.002 
+#define PROPORTIONAL_GAIN 0.0017 
 
 // Derivative Term Coefficient
-#define DERIVATIVE_GAIN 0.0005
+#define DERIVATIVE_GAIN 0.007
 
 #define DISTURBANCE_OFFSET 0.0
 
 // Last speed in loop (in mm/sec)
 static float current_speed = 0.0;
 
-#define STATIC_BACKWARDS_DUTYCYCLE 0.22
+#define STATIC_BACKWARDS_DUTYCYCLE 0.4
 
 int frequency = 100;
 
