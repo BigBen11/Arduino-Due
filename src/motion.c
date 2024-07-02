@@ -19,7 +19,7 @@
 // Derivative Term Coefficient
 #define DERIVATIVE_GAIN 0.0005
 
-#define DISTURBANCE_OFFSET 0.005
+#define DISTURBANCE_OFFSET 0.0
 
 // Last speed in loop (in mm/sec)
 static float current_speed = 0.0;
@@ -64,18 +64,18 @@ void motion_loop(void) {
     // Calculate duty using the PD controller
     float duty_cycle = PD_controller(gap_target, current_sample.value / 1000.0); // convert mm to meters
 
+    if(gap_target > current_sample.value / 1000.0){
+        direction = false;
+    }else{
+        direction = true; 
+    }
+
     if(direction == false){
         duty_cycle = STATIC_BACKWARDS_DUTYCYCLE;
         frequency = 140;
     }
 
     drive_duty(frequency, duty_cycle);
-
-    if(gap_target > current_sample.value / 1000.0){
-        direction = false;
-    }else{
-        direction = true; 
-    }
 
 }
 
@@ -95,7 +95,7 @@ float PD_controller(float target_distance, float current_distance) {
     float derivative_term = DERIVATIVE_GAIN * current_speed;
 
     // PD combined result
-    float pd_total = proportional_term + derivative_term;
+    float pd_total = proportional_term - derivative_term;
 
     // Add disturbances
     float pd_with_disturbance = pd_total + DISTURBANCE_OFFSET;
